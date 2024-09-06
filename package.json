@@ -1,0 +1,16 @@
+{
+  "name": "cypressforteacher",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Phillip Wellheuser",
+  "license": "ISC",
+  "description": "This will be Cypress automation for the front end of Teacher",
+  "dependencies": {
+    "cypress": "^13.14.2",
+    "typescript": "^5.5.4"
+  }
+}
