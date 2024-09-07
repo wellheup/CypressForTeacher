@@ -1,17 +1,22 @@
 /// <reference types="cypress" />
 
 describe('test the Syllabus tab of the teacher web app', () => {
-  it('navs to syllabus tab and verifies presence of UI elements', () => {
+  beforeEach(() => {
     cy.visit('https://teacher-phillipmm.replit.app/');
-
+  });
+  
+  it('navs to syllabus tab and verifies presence of UI elements', () => {
     cy.get('#syllabus-tab').click();
+    cy.get('#newEntryForm').should('not.be.visible');
+    cy.get('#bulkAddForm').should('not.be.visible');
+    cy.get('#editEntryForm').should('not.be.visible');
+    cy.get('#confirmDeleteForm').should('not.be.visible');
+    cy.get('#author-content-container').should('not.be.visible');
+    cy.get('#newAssignmentForm').should('not.be.visible');
 
-    cy.get('#newEntryForm').should('not.be.visible')
-    cy.wait(1000);
-    // TODO: check for each form to be invisible
     // TODO: check for presence of all buttons
 
-  })
+  });
 
   it('verifies behavior of New Assignment button and Form submission', () => {
     cy.get('#addNewBookButton').click();
@@ -19,7 +24,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#newEntryForm').should('be.visible')
     cy.contains('Add New Entry').should('exist');
     cy.get('#newEntryForm-book').should('exist');
-  })
+  });
 
 
   it('verifies behavior of Add Book button and Form submission', () => {
@@ -57,12 +62,24 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#newEntryForm-season').type('1');
     cy.get('#newEntryForm-is_extra_credit').click();
     cy.get('#newEntryForm-genre').type("Fiction");
-    cy.get('Save').click();
+    // cy.contains('Save').click(); //TODO: uncommment this
 
+    // TODO: check for updated addition of book
+  });
 
-    // click each button
-      // check for popup visibility changes
-      // fill out popup and mimic the unit tests
+    it('verifies behavior of Author Books buttons', () => {
 
-  })
+    });
+
+    it('verifies behavior of Edit Entry button and Form', () => {
+
+    });
+
+    it('verifies behavior of Complete Entry button', () => {
+
+    });
+
+    it('verifies behavior of Delete Entry button', () => {
+
+    });
 })
