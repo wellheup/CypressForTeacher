@@ -59,7 +59,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
 
     // fill out form
     cy.wait(1000);
-    cy.get('#newEntryForm').should('be.visible')
+    cy.get('#newEntryForm').should('be.visible');
     cy.contains('Add New Entry').should('exist');
     cy.get('#newEntryForm-book').type("New Book Title test");
     cy.get('#newEntryForm-author').type("Author Name test");
@@ -69,7 +69,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#newEntryForm-season').type('1');
     cy.get('#newEntryForm-is_extra_credit').click();
     cy.get('#newEntryForm-genre').type("Fiction");
-    // cy.contains('Save').click(); //TODO: uncommment this
+    cy.get('#newEntryForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').click();
 
     cy.wait(1000);
     cy.contains('New Book Title test').should('have.length', 1);
@@ -77,6 +77,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
 
   it('verifies behavior of Edit Entry button and Form', () => {
     cy.contains('New Book Title test')
+      .parent()
       .parent()
       .within(()=>{
         cy.contains('Edit').click();
@@ -97,10 +98,12 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#editEntryForm-down_votes').should('exist');
     cy.get('#editEntryForm-genre').should('exist');
     cy.contains('Save').should('exist');
-    cy.contains('Cancel').should('exist');
-    cy.contains('Cancel').click();
+    cy.get('#editEntryForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-secondary').should('exist');
+    cy.get('#editEntryForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-secondary').click();
     cy.get('#editEntryForm').should('not.be.visible');
     cy.contains('New Book Title test')
+      .scrollIntoView()
+      .parent()
       .parent()
       .within(()=>{
         cy.contains('Edit').click();
@@ -117,18 +120,19 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#editEntryForm-added_by').type("Editor test");
     cy.get('#editEntryForm-season').type('2');
     cy.get('#editEntryForm-is_extra_credit').click();
-    cy.get('#editEntryForm-date_completed').type('01/01/2023');
+    cy.get('#editEntryForm-date_completed').type('2023-01-01');
     cy.get('#editEntryForm-up_votes').type('10');
     cy.get('#editEntryForm-down_votes').type('5');
     cy.get('#editEntryForm-genre').type("Non-Fiction");
-    // cy.contains('Save').click(); //TODO: uncommment this
+    cy.get('#editEntryForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').click();
 
     cy.wait(1000);
-    cy.contains('Edit Book Title test').should('have.length', 1);
+    cy.contains('Edit Book Title test').scrollIntoView().should('have.length', 1);
   });
 
   it('verifies behavior of Complete Entry button', () => {
     cy.contains('Edit Book Title test')
+      .parent()
       .parent()
       .within(()=>{
         cy.contains('Mark Book Complete').click();
@@ -136,10 +140,12 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.wait(1000);
     cy.contains('Edit Book Title test')
       .parent()
+      .parent()
       .within(()=>{
         cy.contains('Mark Book Complete').should('not.exist');
       });
     cy.contains('Edit Book Title test')
+    .parent()
     .parent()
     .within(()=>{
       cy.contains('✔').should('exist');
@@ -149,22 +155,99 @@ describe('test the Syllabus tab of the teacher web app', () => {
   it('verifies behavior of Delete Entry button', () => {
     cy.contains('Edit Book Title test')
       .parent()
+      .parent()
       .within(()=>{
-        cy.contains('Delete').click();
+        cy.contains('Delete').scrollIntoView().click();
       });
+    cy.wait(1000);
+    cy.get('#confirmDeleteForm').should('be.visible');
+    cy.get('.text-center > .btn-danger').click();
     cy.wait(1000);
     cy.contains('Edit Book Title test').should('not.exist');
   });
 
   it('verifies behavior of Columns toggle', () => {
+    const columnsToKeep : string[] = [
+      'th.col-book',
+      'th.col-author',
+      'th.col-series',
+      'th.col-is_completed',
+      'th.col-date_completed',
+      'th.col-num_in_series',
+    ];
+    const columns : string [] = [
+      'th.col-unique_id',
+      'th.col-book',
+      'th.col-author',
+      'th.col-series',
+      'th.col-num_in_series',
+      'th.col-date_added',
+      'th.col-is_completed',
+      'th.col-added_by',
+      'th.col-season',
+      'th.col-is_extra_credit',
+      'th.col-date_completed',
+      'th.col-up_votes',
+      'th.col-down_votes',
+      'th.col-genre',
+    ];
+    cy.get('th[class^=col-]').should('have.length', 14);
+    columns.forEach((col)=>{
+      if(columnsToKeep.includes(col)){
+        cy.get(col).scrollIntoView().should('be.visible');
+      } else {
+        cy.get(col).scrollIntoView().should('not.be.visible');
+      }
+    });
+      
     cy.get('.bootstrap-switch-handle-off').click()
     cy.wait(1000);
-    //TODO: check for display of columns count to be lower, then higher after click
+    columns.forEach((col)=>{
+        cy.get(col).scrollIntoView().should('be.visible');
+    });
+
     cy.get('.bootstrap-switch-handle-on').click()
+    cy.wait(1000);
+    columns.forEach((col)=>{
+      if(columnsToKeep.includes(col)){
+        cy.get(col).scrollIntoView().should('be.visible');
+      } else {
+        cy.get(col).scrollIntoView().should('not.be.visible');
+      }
+    });
   });
 
   it('verifies behavior of Bulk Add button and Form', () => {
+    cy.get('#bulkAddButton').click();
+    cy.wait(1000);
+    cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-secondary').scrollIntoView().click();
+    cy.wait(1000);
 
+    let books = "";
+    for (let i = 0; i < 5; i++) {
+      books += `New Book Title test${i},Author Name test${i},Series Name test${i},${i}\n`;
+    }
+
+    cy.get('#bulkAddButton').click();
+    cy.wait(1000);
+
+    cy.get('#bulkAddForm-bookList').type(books);
+    cy.get('#bulkAddForm-added_by').type("Tester test");
+    cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').scrollIntoView().click(); 
+
+    for (let i = 0; i < 5; i++) {
+      cy.contains('Tester test')
+        .parent()
+        .parent()
+        .within(()=>{
+          cy.contains('Delete').scrollIntoView().click();
+      });
+      cy.wait(2000);
+      cy.get('#confirmDeleteForm').should('be.visible');
+      cy.get('.text-center > .btn-danger').click();
+      cy.wait(2000);
+    }
+    cy.contains('Tester test').should('not.exist');
   });
 
   it('verifies behavior of Author Books buttons', () => {
