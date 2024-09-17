@@ -113,57 +113,44 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.wait(1000);
     cy.get('#editEntryForm').should('be.visible')
     cy.contains('Edit Entry').should('exist');
-    cy.get('#editEntryForm-book').type("Edited Book Title test");
-    cy.get('#editEntryForm-author').type("Edited Author test");
-    cy.get('#editEntryForm-series').type("Edited Series test");
-    cy.get('#editEntryForm-num_in_series').type('2');
-    cy.get('#editEntryForm-added_by').type("Editor test");
-    cy.get('#editEntryForm-season').type('2');
+    cy.get('#editEntryForm-book').clear().type("Edited Book Title test");
+    cy.get('#editEntryForm-author').clear().type("Edited Author test");
+    cy.get('#editEntryForm-series').clear().type("Edited Series test");
+    cy.get('#editEntryForm-num_in_series').clear().type('2');
+    cy.get('#editEntryForm-added_by').clear().type("Editor test");
+    cy.get('#editEntryForm-season').clear().type('2');
     cy.get('#editEntryForm-is_extra_credit').click();
-    cy.get('#editEntryForm-date_completed').type('2023-01-01');
-    cy.get('#editEntryForm-up_votes').type('10');
-    cy.get('#editEntryForm-down_votes').type('5');
-    cy.get('#editEntryForm-genre').type("Non-Fiction");
+    cy.get('#editEntryForm-date_completed').clear().type('2023-01-01');
+    cy.get('#editEntryForm-up_votes').clear().type('10');
+    cy.get('#editEntryForm-down_votes').clear().type('5');
+    cy.get('#editEntryForm-genre').clear().type("Non-Fiction");
     cy.get('#editEntryForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').click();
 
     cy.wait(1000);
-    cy.contains('Edit Book Title test').scrollIntoView().should('have.length', 1);
+    cy.contains('Edited Book Title test').scrollIntoView().should('have.length', 1);
   });
 
   it('verifies behavior of Complete Entry button', () => {
-    cy.contains('Edit Book Title test')
-      .parent()
-      .parent()
-      .within(()=>{
-        cy.contains('Mark Book Complete').click();
-      });
+    cy.contains('Edited Book Title test').as('book');
+    cy.get('@book').parent().as('book_box');
+    cy.get('@book_box').parent().as('row');
+    cy.get('@row').get('.col-date_completed').as('col');
+    cy.get('@col').contains('Mark Book Complete').scrollIntoView().click({force: true});
     cy.wait(1000);
-    cy.contains('Edit Book Title test')
-      .parent()
-      .parent()
-      .within(()=>{
-        cy.contains('Mark Book Complete').should('not.exist');
-      });
-    cy.contains('Edit Book Title test')
-    .parent()
-    .parent()
-    .within(()=>{
-      cy.contains('✔').should('exist');
-    });
+    cy.get('@col').contains('Mark Book Complete').should('not.be.visible');
+    cy.get('@row').get('.col-is_completed').contains('✔').should('exist');
   });
 
   it('verifies behavior of Delete Entry button', () => {
-    cy.contains('Edit Book Title test')
-      .parent()
-      .parent()
-      .within(()=>{
-        cy.contains('Delete').scrollIntoView().click();
-      });
+    cy.contains('Edited Book Title test').as('added_by');
+    cy.get('@added_by').parent().as('added_box');
+    cy.get('@added_box').parent().as('row');
+    cy.get('@row').get('[id^=delete-][id$=-Button]').click();
     cy.wait(1000);
     cy.get('#confirmDeleteForm').should('be.visible');
     cy.get('.text-center > .btn-danger').click();
     cy.wait(1000);
-    cy.contains('Edit Book Title test').should('not.exist');
+    cy.contains('Edited Book Title test').should('not.exist');
   });
 
   it('verifies behavior of Columns toggle', () => {
@@ -235,17 +222,16 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#bulkAddForm-added_by').type("Tester test");
     cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').scrollIntoView().click(); 
 
+  
     for (let i = 0; i < 5; i++) {
-      cy.contains('Tester test')
-        .parent()
-        .parent()
-        .within(()=>{
-          cy.contains('Delete').scrollIntoView().click();
-      });
-      cy.wait(2000);
+      cy.contains('Tester test').as('added_by');
+      cy.get('@added_by').parent().as('added_box');
+      cy.get('@added_box').parent().as('row');
+      cy.get('@row').get('[id^=delete-][id$=-Button]').click();
+      cy.wait(1000);
       cy.get('#confirmDeleteForm').should('be.visible');
       cy.get('.text-center > .btn-danger').click();
-      cy.wait(2000);
+      cy.wait(1000);
     }
     cy.contains('Tester test').should('not.exist');
   });

@@ -1,4 +1,5 @@
-### install node
+### install node and npm
+Note: You'll probably need to restart your shell for node commands to work
 ```
 Phillip Wellheuser@DESKTOP-L26IESM MINGW64 ~/Cypress/CypressForTeacher
 $ node -v
@@ -10,6 +11,7 @@ $ npm -v
 ```
 
 ### setup node project
+Only need to do this the first time
 ```
 Phillip Wellheuser@DESKTOP-L26IESM MINGW64 ~/Cypress/CypressForTeacher
 $ npm init -y

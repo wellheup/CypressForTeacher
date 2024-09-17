@@ -11,6 +11,6 @@
   "description": "This will be Cypress automation for the front end of Teacher",
   "dependencies": {
     "cypress": "^13.14.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   }
 }
