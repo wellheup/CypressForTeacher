@@ -1,5 +1,17 @@
 /// <reference types="cypress" />
 
+function deleteExtras(){
+  cy.contains('Tester test').as('added_by');
+  cy.get('@added_by').parent().as('added_box');
+  cy.get('@added_box').parent().within(()=>{
+    cy.get('[id^=delete-][id$=-Button]').click();
+    cy.wait(1000);
+  });
+  cy.get('#confirmDeleteForm').should('be.visible');
+  cy.get('.text-center > .btn-danger').click();
+  cy.wait(1000);
+}
+
 describe('test the Syllabus tab of the teacher web app', () => {
   beforeEach(() => {
     cy.visit('https://teacher-phillipmm.replit.app/');
@@ -133,20 +145,22 @@ describe('test the Syllabus tab of the teacher web app', () => {
   it('verifies behavior of Complete Entry button', () => {
     cy.contains('Edited Book Title test').as('book');
     cy.get('@book').parent().as('book_box');
-    cy.get('@book_box').parent().as('row');
-    cy.get('@row').get('.col-date_completed').as('col');
-    cy.get('@col').contains('Mark Book Complete').scrollIntoView().click({force: true});
-    cy.wait(1000);
-    cy.get('@col').contains('Mark Book Complete').should('not.be.visible');
-    cy.get('@row').get('.col-is_completed').contains('✔').should('exist');
+    cy.get('@book_box').parent().within(()=>{
+      cy.get('.col-date_completed').as('col');
+      cy.get('@col').contains('Mark Book Complete').scrollIntoView().click({force: true});
+      cy.wait(1000);
+      cy.get('@col').contains('Mark Book Complete').should('not.be.visible');
+      cy.get('@row').get('.col-is_completed').contains('✔').should('exist');
+    });
   });
 
   it('verifies behavior of Delete Entry button', () => {
     cy.contains('Edited Book Title test').as('added_by');
     cy.get('@added_by').parent().as('added_box');
-    cy.get('@added_box').parent().as('row');
-    cy.get('@row').get('[id^=delete-][id$=-Button]').click();
-    cy.wait(1000);
+    cy.get('@added_box').parent().within(()=>{
+      cy.get('[id^=delete-][id$=-Button]').click();
+      cy.wait(1000);
+    });
     cy.get('#confirmDeleteForm').should('be.visible');
     cy.get('.text-center > .btn-danger').click();
     cy.wait(1000);
@@ -224,19 +238,16 @@ describe('test the Syllabus tab of the teacher web app', () => {
 
   
     for (let i = 0; i < 5; i++) {
-      cy.contains('Tester test').as('added_by');
-      cy.get('@added_by').parent().as('added_box');
-      cy.get('@added_box').parent().as('row');
-      cy.get('@row').get('[id^=delete-][id$=-Button]').click();
-      cy.wait(1000);
-      cy.get('#confirmDeleteForm').should('be.visible');
-      cy.get('.text-center > .btn-danger').click();
-      cy.wait(1000);
+      deleteExtras();
     }
+    // while(cy.contains('Tester test')){
+    //   deleteExtras();
+    // }
+
     cy.contains('Tester test').should('not.exist');
   });
 
   it('verifies behavior of Author Books buttons', () => {
-
+    
   });
-})
+});
