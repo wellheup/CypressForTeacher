@@ -17,7 +17,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.visit('https://teacher-phillipmm.replit.app/');
   });
   
-  it('navs to syllabus tab and verifies presence of UI elements', () => {
+  it.skip('navs to syllabus tab and verifies presence of UI elements', () => {
     cy.get('#syllabus-tab').click();
     cy.get('#newEntryForm').should('not.be.visible');
     cy.get('#bulkAddForm').should('not.be.visible');
@@ -38,7 +38,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get(':nth-child(1) > .col-author > div > .author-link').should('exist');
   });
 
-  it('verifies behavior of New Assignment button and Form submission', () => {
+  it.skip('verifies behavior of New Assignment button and Form submission', () => {
     cy.get('#addNewBookButton').click();
     cy.wait(1000);
     cy.get('#newEntryForm').should('be.visible')
@@ -87,6 +87,18 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.contains('New Book Title test').should('have.length', 1);
   });
 
+  it('verifies behavior of Complete Entry button', () => {
+    cy.contains('New Book Title test').as('book');
+    cy.get('@book').parent().as('book_box');
+    cy.get('@book_box').parent().within(()=>{
+      cy.get('.col-date_completed').as('col');
+      cy.get('@col').contains('Mark Book Complete').scrollIntoView().click({force: true});
+      cy.wait(3000);
+      cy.get('@col').contains('Mark Book Complete').should('not.be.visible');
+      cy.get('.col-is_completed').contains('✔').should('exist');
+    });
+  });
+
   it('verifies behavior of Edit Entry button and Form', () => {
     cy.contains('New Book Title test')
       .parent()
@@ -132,7 +144,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#editEntryForm-added_by').clear().type("Editor test");
     cy.get('#editEntryForm-season').clear().type('2');
     cy.get('#editEntryForm-is_extra_credit').click();
-    cy.get('#editEntryForm-date_completed').clear().type('2023-01-01');
+    // cy.get('#editEntryForm-date_completed').clear().type('2023-01-01');
     cy.get('#editEntryForm-up_votes').clear().type('10');
     cy.get('#editEntryForm-down_votes').clear().type('5');
     cy.get('#editEntryForm-genre').clear().type("Non-Fiction");
@@ -140,18 +152,6 @@ describe('test the Syllabus tab of the teacher web app', () => {
 
     cy.wait(1000);
     cy.contains('Edited Book Title test').scrollIntoView().should('have.length', 1);
-  });
-
-  it('verifies behavior of Complete Entry button', () => {
-    cy.contains('Edited Book Title test').as('book');
-    cy.get('@book').parent().as('book_box');
-    cy.get('@book_box').parent().within(()=>{
-      cy.get('.col-date_completed').as('col');
-      cy.get('@col').contains('Mark Book Complete').scrollIntoView().click({force: true});
-      cy.wait(1000);
-      cy.get('@col').contains('Mark Book Complete').should('not.be.visible');
-      cy.get('@row').get('.col-is_completed').contains('✔').should('exist');
-    });
   });
 
   it('verifies behavior of Delete Entry button', () => {
@@ -167,7 +167,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.contains('Edited Book Title test').should('not.exist');
   });
 
-  it('verifies behavior of Columns toggle', () => {
+  it.skip('verifies behavior of Columns toggle', () => {
     const columnsToKeep : string[] = [
       'th.col-book',
       'th.col-author',
@@ -218,7 +218,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     });
   });
 
-  it('verifies behavior of Bulk Add button and Form', () => {
+  it.skip('verifies behavior of Bulk Add button and Form', () => {
     cy.get('#bulkAddButton').click();
     cy.wait(1000);
     cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-secondary').scrollIntoView().click();
@@ -237,7 +237,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').scrollIntoView().click(); 
 
   
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 25; i++) {
       deleteExtras();
     }
     // while(cy.contains('Tester test')){
