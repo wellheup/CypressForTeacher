@@ -238,7 +238,7 @@ describe('test the Syllabus tab of the teacher web app', () => {
 
     let books = "";
     for (let i = 0; i < 5; i++) {
-      books += `New Book Title test${i},Author Name test${i},Series Name test${i},${i}\n`;
+      books += `New Book Title test${i},Author Name test,Series Name test${i},${i}\n`;
     }
 
     cy.get('#bulkAddButton').click();
@@ -247,25 +247,28 @@ describe('test the Syllabus tab of the teacher web app', () => {
     cy.get('#bulkAddForm-bookList').type(books);
     cy.get('#bulkAddForm-added_by').type("Tester test");
     cy.get('#bulkAddForm > .modal-dialog > .modal-content > .modal-body > form > .text-center > .btn-primary').scrollIntoView().click(); 
+    cy.wait(2000);
+  });
 
-  
+  it('verifies behavior of Author Books buttons', () => {
+    cy.contains('Author Name test').first().click();
+    cy.wait(1000);
+    cy.get('#authorPopupLabel').should('be.visible').should('contain.text', 'DEMO Books by Author Name test');
+    cy.get('#authorPopupModal > .modal-body').within(()=>{
+      for (let i = 0; i < 5; i++) {
+        cy.contains(`New Book Title test${i}`).should('be.visible');
+      }
+    });
+    cy.get('#authorPopupModal > .modal-header > .close > span').click();
+    cy.get('#authorPopupLabel').should('not.be.visible');
+    cy.wait(2000);
+  });
+
+  it('verifies deletion of test entries', () => {
     for (let i = 0; i < 5; i++) {
       deleteExtras('Tester test');
     }
 
-    // while (containsExists('Tester test')){
-    //   console.log('Tester test');
-    //   deleteExtras('Tester test');
-    // }
-    // while(containsExists('Editor test')){
-    //   console.log('Editor test');
-    //   deleteExtras('Editor test');
-    // }
-
     cy.contains('Tester test').should('not.exist');
-  });
-
-  it('verifies behavior of Author Books buttons', () => {
-    
   });
 });
