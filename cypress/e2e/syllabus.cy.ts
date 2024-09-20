@@ -9,7 +9,7 @@ function deleteExtras(selector: string) {
       cy.get("[id^=delete-][id$=-Button]").click();
       cy.wait(2000);
     });
-  cy.get("#confirmDeleteForm").should("be.visible");
+  cy.wait("#confirmDeleteForm").should("be.visible");
   cy.get(".text-center > .btn-danger").click();
   cy.wait(2000);
 }
@@ -31,7 +31,7 @@ describe("test the Syllabus tab of the teacher web app", () => {
     cy.visit("https://teacher-phillipmm.replit.app/");
   });
 
-  it("navs to syllabus tab and verifies all UI elements", () => {
+  it("navs to syllabus tab and verifies presence of UI elements", () => {
     cy.get("#syllabus-tab").click();
     cy.get("#newEntryForm").should("not.be.visible");
     cy.get("#bulkAddForm").should("not.be.visible");
@@ -51,17 +51,17 @@ describe("test the Syllabus tab of the teacher web app", () => {
       cy.contains("Delete").should("exist");
     });
     cy.get(":nth-child(1) > .col-author > div > .author-link").should("exist");
-    // });
+  });
 
-    // it("verifies behavior of New Assignment button and Form submission", () => {
+  it("verifies behavior of New Assignment button and Form submission", () => {
     cy.get("#addNewBookButton").click();
     cy.wait(1000);
     cy.get("#newEntryForm").should("be.visible");
     cy.contains("Add New Entry").should("exist");
     cy.get("#newEntryForm-book").should("exist");
-    // });
+  });
 
-    // it("verifies behavior of Add Book button and Form submission", () => {
+  it("verifies behavior of Add Book button and Form submission", () => {
     cy.get("#addNewBookButton").click();
     cy.wait(1000);
     cy.get("#newEntryForm").should("be.visible");
@@ -102,9 +102,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
 
     cy.wait(1000);
     cy.contains("New Book Title test").should("have.length", 1);
-    // });
+  });
 
-    // it("verifies behavior of Complete Entry button", () => {
+  it("verifies behavior of Complete Entry button", () => {
     cy.contains("New Book Title test").as("book");
     cy.get("@book").parent().as("book_box");
     cy.get("@book_box")
@@ -119,9 +119,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
         cy.get("@col").contains("Mark Book Complete").should("not.exist");
         cy.get(".col-is_completed").contains("✔").should("exist");
       });
-    // });
+  });
 
-    // it("verifies behavior of Edit Entry button and Form", () => {
+  it("verifies behavior of Edit Entry button and Form", () => {
     cy.contains("New Book Title test")
       .parent()
       .parent()
@@ -182,9 +182,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
     cy.contains("Edited Book Title test")
       .scrollIntoView()
       .should("have.length", 1);
-    // });
+  });
 
-    // it("verifies behavior of Delete Entry button", () => {
+  it("verifies behavior of Delete Entry button", () => {
     cy.contains("Edited Book Title test").as("added_by");
     cy.get("@added_by").parent().as("added_box");
     cy.get("@added_box")
@@ -197,9 +197,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
     cy.get(".text-center > .btn-danger").click();
     cy.wait(1000);
     cy.contains("Edited Book Title test").should("not.exist");
-    // });
+  });
 
-    // it("verifies behavior of Columns toggle", () => {
+  it("verifies behavior of Columns toggle", () => {
     const columnsToKeep: string[] = [
       "th.col-book",
       "th.col-author",
@@ -248,9 +248,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
         cy.get(col).scrollIntoView().should("not.be.visible");
       }
     });
-    // });
+  });
 
-    // it("verifies behavior of Bulk Add button and Form", () => {
+  it("verifies behavior of Bulk Add button and Form", () => {
     cy.get("#bulkAddButton").click();
     cy.wait(1000);
     cy.get(
@@ -276,9 +276,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
       .scrollIntoView()
       .click();
     cy.wait(2000);
-    // });
+  });
 
-    // it("verifies behavior of Author Books buttons", () => {
+  it("verifies behavior of Author Books buttons", () => {
     cy.contains("Author Name test").first().click();
     cy.wait(1000);
     cy.get("#authorPopupLabel")
@@ -292,9 +292,9 @@ describe("test the Syllabus tab of the teacher web app", () => {
     cy.get("#authorPopupModal > .modal-header > .close > span").click();
     cy.get("#authorPopupLabel").should("not.be.visible");
     cy.wait(2000);
-    // });
+  });
 
-    // it("verifies deletion of test entries", () => {
+  it("verifies deletion of test entries", () => {
     for (let i = 0; i < 5; i++) {
       deleteExtras("Tester test");
     }
