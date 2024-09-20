@@ -9,7 +9,7 @@ function deleteExtras(selector: string) {
       cy.get("[id^=delete-][id$=-Button]").click();
       cy.wait(2000);
     });
-  cy.wait("#confirmDeleteForm").should("be.visible");
+  cy.get("#confirmDeleteForm").should("be.visible");
   cy.get(".text-center > .btn-danger").click();
   cy.wait(2000);
 }
