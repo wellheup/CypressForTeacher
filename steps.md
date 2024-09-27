@@ -1,3 +1,4 @@
+## Cypress Setup
 ### install node and npm
 Note: You'll probably need to restart your shell for node commands to work
 ```
@@ -64,3 +65,36 @@ $ npx cypress open
 ```
 
 ### write cypress tests
+
+
+## Docker Setup
+### download, install, launch, verify docker
+use the manual installer exe, it's more convenient. A restart will be necessary. Also, make sure you're installing the AMD64 not ARM64, the UI is deceptive
+[text](https://www.docker.com/get-started/)
+```
+$ docker --version
+Docker version 27.2.0, build 3ab4256
+
+$ docker ps
+CONTAINER ID   IMAGE                             COMMAND                  CREATED          STATUS          PORTS                  NAMES
+85a783212e98   docker/welcome-to-docker:latest   "/docker-entrypoint.…"   12 minutes ago   Up 12 minutes   0.0.0.0:8088->80/tcp   welcome-to-docker
+```
+also install the Docker VS Code extension, it's convenient to use
+
+### Create your docker image
+make a Dockerfile to use because it is easier at volume and to read than command line
+
+first build docker image
+```
+$ docker build -t cypress-for-teacher .
+```
+
+view your image 
+```
+$ docker image ls
+```
+
+run your dockerized app
+```
+$ docker build -t cypress-for-teacher .
+```
