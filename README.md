@@ -1,3 +1,7 @@
+## Cypress for Teacher
+### This is a basic frontend test for the main frontend features of [text](https://teacher-phillipmm.replit.app/)
+Though best practices are not always followed, such as setting up for each test with API calls or not relying on app states established by prior tests, such improvements were beyond the scope of my intentions for the project, primarily, to practice setting up a basic Cypress automation framework and make sure app still works when redeploying. 
+
 ## Cypress Setup
 ### install node and npm
 Note: You'll probably need to restart your shell for node commands to work
