@@ -96,5 +96,5 @@ $ docker image ls
 
 run your dockerized app
 ```
-$ docker build -t cypress-for-teacher .
+$ docker run -t cypress-for-teacher .
 ```
